@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthFormWrapper from '../../../components/AuthFormWrapper';
 import { toast } from 'react-toastify';
-import { Eye, EyeOff, RotateCw } from 'lucide-react';
+import { Eye, EyeOff, RotateCw } from 'lucide-react'; // Rocket sudah dihapus dari sini
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,7 +28,10 @@ export default function LoginPage() {
   const handleFailure = (msg?: string) => {
     setAttempts((prev) => {
       const nextValue = Math.max(0, prev - 1);
-      const finalMsg = nextValue === 0 ? "Login gagal / Kesempatan login habis!" : (msg || `Login Gagal! Sisa kesempatan: ${nextValue}`);
+      const finalMsg = nextValue === 0 
+        ? "Login gagal / Kesempatan login habis!" 
+        : (msg || `Login Gagal! Sisa kesempatan: ${nextValue}`);
+      
       toast.error(finalMsg, { toastId: 'status' });
       return nextValue;
     });
@@ -36,7 +39,6 @@ export default function LoginPage() {
   };
 
   const onValid = (data: any) => {
-    // Sesuaikan dengan data NPM kamu
     const VALID_EMAIL = "241712987@gmail.com"; 
     const VALID_PWD = "241712987";
 
@@ -46,23 +48,24 @@ export default function LoginPage() {
     }
 
     if (data.email === VALID_EMAIL && data.password === VALID_PWD) {
-      // MEMBERIKAN KUNCI PRIVAT: Supaya link localhost/home tidak bisa dibuka publik
+      // Kunci akses halaman privat
       localStorage.setItem('isLoggedIn', 'true'); 
       
-      toast.success('Selamat Datang!', { icon: "🚀" });
+      // Notifikasi bersih tanpa ikon tambahan
+      toast.success('Selamat Datang!');
       router.push('/home'); 
     } else {
-      handleFailure();
+      handleFailure('Email atau Password salah!');
     }
   };
 
   return (
     <AuthFormWrapper title="Login">
       <div className="w-full text-center">
-        <p className="text-[13px] font-bold text-gray-800 mb-6 mt-4">Sisa Kesempatan: {attempts}</p>
+        <p className="text-[13px] font-bold text-gray-800 mb-6 mt-2">Sisa Kesempatan: {attempts}</p>
         
-        <form onSubmit={handleSubmit(onValid, () => handleFailure())} className="space-y-4 text-left">
-          {/* Email Section */}
+        <form onSubmit={handleSubmit(onValid, () => handleFailure())} className="space-y-3.5 text-left">
+          {/* Email */}
           <div>
             <label className="text-[13px] text-gray-600 font-normal mb-1 block ml-1">Email</label>
             <input 
@@ -74,7 +77,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password Section */}
+          {/* Password */}
           <div>
             <label className="text-[13px] text-gray-600 font-normal mb-1 block ml-1">Password</label>
             <div className="relative">
@@ -92,7 +95,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Captcha Section */}
+          {/* Captcha */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="text-[13px] text-gray-600 font-bold">Captcha:</span>
@@ -110,11 +113,12 @@ export default function LoginPage() {
             />
           </div>
 
+          {/* Buttons */}
           <div className="pt-2 space-y-3">
             <button 
               type="submit" 
               disabled={attempts === 0} 
-              className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-bold text-[15px] shadow-lg disabled:bg-gray-300"
+              className="w-full bg-[#2563EB] text-white py-3.5 rounded-xl font-bold text-[15px] shadow-lg active:scale-95 transition-all disabled:bg-gray-300"
             >
               Sign In
             </button>
@@ -124,14 +128,14 @@ export default function LoginPage() {
               onClick={() => { setAttempts(3); toast.success("Kesempatan login berhasil direset!"); }} 
               disabled={attempts > 0}
               className={`w-full text-white py-3.5 rounded-xl font-bold text-[15px] transition-all ${
-                attempts === 0 ? 'bg-[#22C55E] shadow-md' : 'bg-[#9CA3AF] cursor-not-allowed'
+                attempts === 0 ? 'bg-[#22C55E] shadow-md' : 'bg-[#9CA3AF]'
               }`}
             >
               Reset Kesempatan
             </button>
           </div>
 
-          {/* SOSIAL ICONS - PERBAIKAN URL DI SINI */}
+          {/* Social Media Ikon Tetap Diperbaiki */}
           <div className="flex justify-center gap-6 mt-6">
             {[
               { id: 'google', url: 'https://www.svgrepo.com/show/475656/google-color.svg' },
